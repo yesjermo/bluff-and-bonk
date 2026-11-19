@@ -1,0 +1,14 @@
+# One-click deploy of the game server to Render (free plan supports WebSockets).
+# Free instances sleep after ~15 minutes idle; the first connection wakes them (~1 minute).
+services:
+  - type: web
+    name: bluff-and-bonk
+    runtime: python
+    plan: free
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: cd server && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://yesjermo.github.io

@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import type { GameClient } from "@shared/client";
 import { RinkCanvas } from "../components/RinkCanvas";
 import { demoScene } from "@shared/demo";
@@ -10,6 +10,13 @@ export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; o
   const [joining, setJoining] = useState(false);
   const sceneFn = useCallback((t: number) => demoScene(t, reducedMotion), [reducedMotion]);
   const busy = client.status === "connecting" || client.status === "reconnecting";
+  // Re-render once a second while connecting so the "waking up" hint can appear.
+  const [, tick] = useState(0);
+  useEffect(() => {
+    if (!busy) return;
+    const id = setInterval(() => tick((x) => x + 1), 1000);
+    return () => clearInterval(id);
+  }, [busy]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -70,7 +77,11 @@ export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; o
           </p>
         )}
         <p className="status-line" aria-live="polite">
-          {client.status === "connecting" ? "Connecting…" : client.status === "reconnecting" ? "Can't reach the server — retrying…" : " "}
+          {busy
+            ? client.elapsedSince(client.connectingSince) > 4000
+              ? "Waking up the game server — free hosting naps when idle, this can take up to a minute…"
+              : "Connecting…"
+            : "\u00a0"}
         </p>
         <button className="link" onClick={onHowTo}>
           How to play

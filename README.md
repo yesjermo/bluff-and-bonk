@@ -1,10 +1,15 @@
+<div align="center">
+
 # BLUFF & BONK
+
+**Aim in secret. Shoot together.**
 
 [![Play in your browser](https://img.shields.io/badge/play-in%20your%20browser-2CE3F2?style=for-the-badge&labelColor=070E22)](https://yesjermo.github.io/bluff-and-bonk/)
 
 [![CI](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml)
 [![Deploy web demo](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml)
 ![Platforms](https://img.shields.io/badge/platforms-web%20%7C%20iOS%20%7C%20Android-FF8A2A)
+<br>
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-WebSockets-009688?logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
@@ -13,7 +18,9 @@
 ![Expo](https://img.shields.io/badge/Expo-SDK%2058-000020?logo=expo&logoColor=white)
 ![React Native Skia](https://img.shields.io/badge/React%20Native-Skia-61DAFB?logo=react&logoColor=black)
 
-**Website:** https://yesjermo.github.io/bluff-and-bonk/
+**Website:** [yesjermo.github.io/bluff-and-bonk](https://yesjermo.github.io/bluff-and-bonk/)
+
+</div>
 
 Two players secretly aim their disks, lock a shot, and launch at the same time to
 knock a neutral ball into the opposing goal. First to two goals wins.
@@ -22,12 +29,11 @@ One authoritative FastAPI server runs the physics and rules. The browser game
 (React + Canvas 2D) and the iOS/Android app (Expo + React Native Skia) speak the
 same WebSocket protocol, so web, iPhone and Android players share rooms.
 
-> **About the web demo:** GitHub Pages can't run the Python server, so the
-> website is built in offline mode. Practice (tutorial + bot) runs entirely in
-> your browser using a TypeScript port of the server physics, checked
-> against the Python version in CI. Create Room and Join Room are disabled
-> there; for online play, run the server yourself (below) or host it and build
-> the web app with `VITE_SERVER_URL`.
+> **About the web demo:** practice (tutorial + bot) runs entirely in your
+> browser using a TypeScript port of the server physics, checked against the
+> Python version in CI. **Create Room / Join Room** need the game server: they
+> switch on automatically once the repo variable `BONK_SERVER_URL` points at a
+> hosted server (see [Host the game server](#host-the-game-server)).
 
 ```
 shared/   TypeScript used by both clients: protocol types, constants.json,
@@ -181,19 +187,35 @@ ad-hoc provisioning profile with device UDIDs for iOS preview; App Store profile
 for production) and an Android keystore (EAS can generate one). No EAS builds
 were produced as part of this work; see the build status section of the report.
 
-## Roadmap
+## Host the game server
 
-**Online play on the website (saved for later).** The website currently runs
-practice only. To turn on Create Room / Join Room there:
+GitHub Pages only serves static files, so online rooms need the FastAPI server
+running somewhere public. The repo includes a [`render.yaml`](render.yaml)
+blueprint for Render's free plan (WebSockets supported):
 
-- [ ] Host `server/` somewhere that supports WebSockets over HTTPS (for example
-      Render, Fly.io or Railway) and set `ALLOWED_ORIGINS` to the site origin.
-- [ ] In `.github/workflows/pages.yml`, set `VITE_SERVER_URL` to that host; the
-      offline build then keeps in-browser practice and enables online rooms.
-- [ ] Point `EXPO_PUBLIC_SERVER_URL` / `EXPO_PUBLIC_WEB_URL` in `mobile/eas.json`
-      at the same host and site so phones and browsers share rooms.
-- [ ] Rooms are in memory on one process: keep a single instance, or add
-      sticky routing by room code before scaling out.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/yesjermo/bluff-and-bonk)
+
+1. Click the button, sign in to Render (GitHub login works), and apply the
+   blueprint. Render builds `server/` and gives you a URL like
+   `https://bluff-and-bonk.onrender.com`. Check `<url>/health` returns `{"ok": true, ...}`.
+2. Tell the website about it — set a repository variable and redeploy:
+
+   ```bash
+   gh variable set BONK_SERVER_URL --body "https://bluff-and-bonk.onrender.com"
+   gh workflow run pages.yml
+   ```
+
+   The Pages build reads `BONK_SERVER_URL` into `VITE_SERVER_URL`. Practice still
+   runs in the browser; Create Room and Join Room now use the server, and invite
+   links (`https://yesjermo.github.io/bluff-and-bonk/r/CODE`) open the room.
+3. For the phone app, set `EXPO_PUBLIC_SERVER_URL` in `mobile/eas.json` to the
+   same URL so phones and browsers share rooms.
+
+Notes: Render's free instances sleep after ~15 minutes idle; the first visitor
+waits up to a minute while it wakes (the site says so). Rooms live in memory on
+one instance, so a restart or redeploy ends active matches. Any host with
+WebSocket support works the same way (Fly.io, Railway, a VPS): run
+`cd server && uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
 
 ## How it works
 

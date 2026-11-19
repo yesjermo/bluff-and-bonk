@@ -30,6 +30,10 @@ jobs:
         working-directory: web
       - run: npm run build:pages
         working-directory: web
+        env:
+          # Set the repo variable BONK_SERVER_URL (e.g. https://bluff-and-bonk.onrender.com)
+          # to enable Create/Join Room on the website. Empty = practice only.
+          VITE_SERVER_URL: ${{ vars.BONK_SERVER_URL }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: web/dist

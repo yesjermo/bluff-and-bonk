@@ -67,6 +67,9 @@ export class GameClient {
   private playK0 = 0;
   private aimTimer: ReturnType<typeof setTimeout> | null = null;
   private wantClose = false;
+  private pinger: ReturnType<typeof setInterval> | null = null;
+  /** When the current connection attempt started (for "waking the server" hints). */
+  connectingSince: number | null = null;
 
   /** Optional wire tap (debugging / privacy checks). */
   onRaw?: (raw: string) => void;
@@ -142,6 +145,8 @@ export class GameClient {
   }
 
   private teardown(): void {
+    if (this.pinger) clearInterval(this.pinger);
+    this.pinger = null;
     if (this.retryTimer) clearTimeout(this.retryTimer);
     this.retryTimer = null;
     if (this.ws) {
@@ -157,6 +162,7 @@ export class GameClient {
   }
 
   private open(status: ConnStatus): void {
+    if (this.connectingSince == null) this.connectingSince = now();
     this.status = status;
     this.synced = false;
     this.emit();
@@ -166,6 +172,10 @@ export class GameClient {
     ws.onopen = () => {
       this.retry = 0;
       this.status = "open";
+      this.connectingSince = null;
+      // Keep-alive so hosting proxies don't drop an idle socket between turns.
+      if (this.pinger) clearInterval(this.pinger);
+      this.pinger = setInterval(() => this.send({ t: "ping", c: Date.now() }), 25_000);
       if (this.room && this.token) this.send({ t: "join", room: this.room, token: this.token });
       else if (this.intro) this.send(this.intro);
       this.emit();
