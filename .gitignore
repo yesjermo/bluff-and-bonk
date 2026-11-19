@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+.env.local
+mobile/ios/
+mobile/android/
+mobile/.expo/
+*.log
+.DS_Store

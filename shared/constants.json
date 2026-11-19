@@ -1,0 +1,51 @@
+{
+  "rink": {
+    "length": 200,
+    "width": 100,
+    "goalWidth": 34,
+    "goalDepth": 11
+  },
+  "bodies": {
+    "diskRadius": 7,
+    "ballRadius": 4.5,
+    "diskMass": 2.0,
+    "ballMass": 1.0
+  },
+  "physics": {
+    "dt": 0.004166666666666667,
+    "substeps": 2,
+    "diskFriction": 95,
+    "ballFriction": 62,
+    "linearDrag": 0.35,
+    "wallRestitution": 0.78,
+    "ballWallRestitution": 0.86,
+    "bodyRestitution": 0.9,
+    "stopSpeed": 2.5,
+    "maxSimSeconds": 7.0,
+    "snapshotEvery": 8
+  },
+  "shots": {
+    "speeds": [0, 112, 162, 218],
+    "arrowLengths": [0, 18, 30, 44]
+  },
+  "start": {
+    "A": [42, 50],
+    "B": [158, 50],
+    "ball": [100, 50]
+  },
+  "tutorial": {
+    "A": [96, 56],
+    "B": [176, 90],
+    "ball": [122, 50]
+  },
+  "rules": {
+    "goalsToWin": 2,
+    "fullPowerCharges": 2,
+    "planningMs": 8000,
+    "revealMs": 600,
+    "countdownMs": 3000,
+    "goalPauseMs": 2200,
+    "pathShowMs": 1200,
+    "rejoinWindowMs": 30000
+  }
+}

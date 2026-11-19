@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["TEAMID.com.impulseduel.app"],
+        "components": [{ "/": "/r/*", "comment": "Room invites open in the app" }]
+      }
+    ]
+  }
+}
