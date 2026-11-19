@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m venv server/.venv && server/.venv/bin/pip install -r server/requirements-dev.txt
-      - run: server/.venv/bin/python -m pytest -q
+      - run: .venv/bin/python -m pytest -q
         working-directory: server
 
   web:
