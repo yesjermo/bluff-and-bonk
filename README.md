@@ -1,11 +1,33 @@
 # IMPULSE DUEL
 
+[![Play in your browser](https://img.shields.io/badge/play-in%20your%20browser-2CE3F2?style=for-the-badge&labelColor=070E22)](https://yesjermo.github.io/impulse-duel/)
+
+[![CI](https://github.com/yesjermo/impulse-duel/actions/workflows/ci.yml/badge.svg)](https://github.com/yesjermo/impulse-duel/actions/workflows/ci.yml)
+[![Deploy web demo](https://github.com/yesjermo/impulse-duel/actions/workflows/pages.yml/badge.svg)](https://github.com/yesjermo/impulse-duel/actions/workflows/pages.yml)
+![Platforms](https://img.shields.io/badge/platforms-web%20%7C%20iOS%20%7C%20Android-FF8A2A)
+![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-WebSockets-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Expo](https://img.shields.io/badge/Expo-SDK%2058-000020?logo=expo&logoColor=white)
+![React Native Skia](https://img.shields.io/badge/React%20Native-Skia-61DAFB?logo=react&logoColor=black)
+
+**Website:** https://yesjermo.github.io/impulse-duel/
+
 Two players secretly aim their disks, lock a shot, and launch at the same time to
 knock a neutral ball into the opposing goal. First to two goals wins.
 
 One authoritative FastAPI server runs the physics and rules. The browser game
 (React + Canvas 2D) and the iOS/Android app (Expo + React Native Skia) speak the
 same WebSocket protocol, so web, iPhone and Android players share rooms.
+
+> **About the web demo:** GitHub Pages can't run the Python server, so the
+> website is built in offline mode. Practice (tutorial + bot) runs entirely in
+> your browser using a TypeScript port of the server physics, checked
+> against the Python version in CI. Create Room and Join Room are disabled
+> there; for online play, run the server yourself (below) or host it and build
+> the web app with `VITE_SERVER_URL`.
 
 ```
 shared/   TypeScript used by both clients: protocol types, constants.json,
@@ -37,12 +59,13 @@ cd server
 .venv/bin/python -m pytest -q
 ```
 
-Shared TypeScript checks (transforms, and a live two-client desktop-vs-phone match + rematch against a server on :8000):
+Shared TypeScript checks: transforms, Python-vs-TypeScript physics parity, and a
+live two-client desktop-vs-phone match + rematch against a server on :8000:
 
 ```bash
 cd web
-npx tsx ../shared/test/transform.test.ts
-npx tsx ../shared/test/crossplay.test.mts
+npm test
+npm run test:crossplay
 ```
 
 ### 2. Web (port 5180)
@@ -100,12 +123,19 @@ also defaults to `<page host>:8000`.
 | server | `ROOM_IDLE_SECONDS` | How long an empty room lives (default 600). |
 | web (build time) | `VITE_SERVER_URL` | Backend base URL, e.g. `https://api.example.com`. `wss://…/ws` is derived. |
 | web (build time) | `VITE_PUBLIC_WEB_URL` | Origin used in invite links (default: page origin). |
+| web (build time) | `VITE_OFFLINE` | `1` = static build with in-browser practice, no server. |
+| web (build time) | `VITE_BASE` | Path prefix the site is served under (default `/`). |
 | mobile | `EXPO_PUBLIC_SERVER_URL` | Backend base URL for the app. |
 | mobile | `EXPO_PUBLIC_WEB_URL` | Web origin used in invite links (`https://<domain>/r/CODE`). |
 | mobile (build) | `IMPULSE_WEB_DOMAIN` | Domain for iOS associated domains + Android app links. |
 | mobile (build) | `IMPULSE_IOS_BUNDLE_ID`, `IMPULSE_ANDROID_PACKAGE`, `EAS_PROJECT_ID` | Identity for store builds. |
 
-Deploy the web build (`npm run build` → `web/dist`) on any static host with an SPA
+**Offline static build** (what the website uses): `npm run build:pages` builds
+with `VITE_OFFLINE=1` and the `/impulse-duel/` base path; practice runs in the
+browser and online rooms are disabled. `.github/workflows/pages.yml` deploys it
+on every push to `main`.
+
+Deploy the online web build (`npm run build` → `web/dist`) on any static host with an SPA
 fallback so `/r/CODE` serves `index.html`. Serve the server behind HTTPS so the
 socket is `wss://`. One server process holds all rooms in memory; run a single
 instance (or add sticky routing by room code before scaling out).

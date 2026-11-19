@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
 
 export default defineConfig({
+  // GitHub Pages serves the site under /impulse-duel/; set VITE_BASE for that build.
+  base: process.env.VITE_BASE || "/",
   plugins: [react()],
   resolve: {
     alias: { "@shared": fileURLToPath(new URL("../shared/src", import.meta.url)) },

@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { GameClient, KeyValueStore } from "@shared/client";
-import { WS_URL } from "./config";
+import { BASE, OFFLINE, WS_URL } from "./config";
+import { localPracticeSocket } from "@shared/localRoom";
 import { Home } from "./screens/Home";
 import { Lobby } from "./screens/Lobby";
 import { Match } from "./screens/Match";
@@ -28,7 +29,7 @@ const store: KeyValueStore = {
 };
 
 // One client per tab, created outside React so StrictMode can't double it.
-const sharedClient = new GameClient(WS_URL, store);
+const sharedClient = new GameClient(WS_URL, store, OFFLINE ? localPracticeSocket : undefined);
 // ?wire=1 records every raw server message in window.__wire for inspection.
 if (new URLSearchParams(location.search).has("wire")) {
   const g = window as unknown as { __wire: string[]; __client: GameClient };
@@ -52,7 +53,8 @@ function useReducedMotion(): boolean {
   return r;
 }
 
-const roomFromPath = () => /^\/r\/([A-Za-z0-9]{4})\/?$/.exec(location.pathname)?.[1]?.toUpperCase() ?? null;
+const roomFromPath = () =>
+  /^\/r\/([A-Za-z0-9]{4})\/?$/.exec(location.pathname.slice(BASE.length))?.[1]?.toUpperCase() ?? null;
 
 export default function App() {
   const client = sharedClient;
@@ -79,13 +81,13 @@ export default function App() {
   const s = client.state;
   useEffect(() => {
     if (!s) return; // connecting or erroring: keep the invite path as-is
-    const want = s.practice ? "/" : `/r/${s.room}`;
+    const want = BASE + (s.practice ? "/" : `/r/${s.room}`);
     if (location.pathname !== want) history.replaceState(null, "", want);
   }, [s?.room, s?.practice, client.error]);
 
   const leave = () => {
     client.leave();
-    history.replaceState(null, "", "/");
+    history.replaceState(null, "", BASE + "/");
   };
 
   let screen;

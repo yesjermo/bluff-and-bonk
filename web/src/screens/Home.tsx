@@ -3,6 +3,7 @@ import type { GameClient } from "@shared/client";
 import { RinkCanvas } from "../components/RinkCanvas";
 import { demoScene } from "@shared/demo";
 import { tutorialDone } from "../App";
+import { REPO_URL } from "../config";
 
 export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; onHowTo: () => void; reducedMotion: boolean }) {
   const [code, setCode] = useState("");
@@ -31,7 +32,7 @@ export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; o
           Play practice
         </button>
         <div className="home-row">
-          <button className="btn" onClick={() => client.create()} disabled={busy}>
+          <button className="btn" onClick={() => client.create()} disabled={busy || client.offlineOnly}>
             Create room
           </button>
           {joining ? (
@@ -57,11 +58,17 @@ export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; o
               </button>
             </form>
           ) : (
-            <button className="btn" onClick={() => setJoining(true)} disabled={busy}>
+            <button className="btn" onClick={() => setJoining(true)} disabled={busy || client.offlineOnly}>
               Join room
             </button>
           )}
         </div>
+        {client.offlineOnly && (
+          <p className="offline-note">
+            This web demo runs practice in your browser. Online rooms need the game server —{" "}
+            <a href={REPO_URL + "#run-it-locally"}>run it yourself</a>.
+          </p>
+        )}
         <p className="status-line" aria-live="polite">
           {client.status === "connecting" ? "Connecting…" : client.status === "reconnecting" ? "Can't reach the server — retrying…" : " "}
         </p>

@@ -13,6 +13,7 @@ import {
   TurnResult,
   Vec,
 } from "./protocol";
+import type { SocketLike } from "./localRoom";
 
 export interface KeyValueStore {
   get(key: string): Promise<string | null> | string | null;
@@ -53,7 +54,7 @@ export class GameClient {
   phaseEndsAt: number | null = null;
   lockedAt: number | null = null;
 
-  private ws: WebSocket | null = null;
+  private ws: SocketLike | null = null;
   private listeners = new Set<() => void>();
   private intro: ClientMsg | null = null;
   private room: string | null = null;
@@ -70,7 +71,17 @@ export class GameClient {
   /** Optional wire tap (debugging / privacy checks). */
   onRaw?: (raw: string) => void;
 
-  constructor(private wsUrl: string, private store: KeyValueStore) {}
+  constructor(
+    private wsUrl: string,
+    private store: KeyValueStore,
+    /** When set, practice runs on this in-browser socket instead of the server. */
+    private localPractice?: () => SocketLike,
+  ) {}
+
+  /** True when online rooms are unavailable (offline-practice-only build). */
+  get offlineOnly(): boolean {
+    return !this.wsUrl && !!this.localPractice;
+  }
 
   // ---------------------------------------------------------------- lifecycle
   subscribe(fn: () => void): () => void {
@@ -149,7 +160,8 @@ export class GameClient {
     this.status = status;
     this.synced = false;
     this.emit();
-    const ws = new WebSocket(this.wsUrl);
+    const local = this.localPractice && (this.intro?.t === "practice" || this.room?.startsWith("P") || !this.wsUrl);
+    const ws: SocketLike = local ? this.localPractice!() : (new WebSocket(this.wsUrl) as unknown as SocketLike);
     this.ws = ws;
     ws.onopen = () => {
       this.retry = 0;
@@ -158,7 +170,7 @@ export class GameClient {
       else if (this.intro) this.send(this.intro);
       this.emit();
     };
-    ws.onmessage = (ev) => {
+    ws.onmessage = (ev: { data: unknown }) => {
       this.onRaw?.(String(ev.data));
       this.onMessage(JSON.parse(String(ev.data)) as ServerMsg);
     };
