@@ -28,10 +28,9 @@ export function Home({
   return (
     <SafeAreaView style={s.screen}>
       <View style={[s.center, { gap: 18 }]}>
-        <View style={{ alignItems: "center" }} accessible accessibilityRole="header" accessibilityLabel="Impulse Duel">
+        <View style={{ alignItems: "center" }} accessible accessibilityRole="header" accessibilityLabel="Bluff & Bonk">
           <Text style={{ color: T.text, fontFamily: T.display, fontSize: 64, lineHeight: 62, fontStyle: "italic" }}>
-            IMPULSE <Text style={{ color: T.cyan }}>DUEL</Text>
-            <Text style={{ color: T.tang }}>.</Text>
+            BLUFF <Text style={{ color: T.tang }}>&amp;</Text> <Text style={{ color: T.cyan }}>BONK</Text>
           </Text>
           <Text style={[s.muted, { fontSize: 18 }]}>Aim in secret. Shoot together.</Text>
         </View>
@@ -115,7 +114,7 @@ export function Lobby({ client, onLeave }: { client: GameClient; onLeave: () => 
               setTimeout(() => setCopied(false), 1500);
             }}
           />
-          <Btn label="Invite Friend" primary onPress={() => Share.share({ message: `Play me in IMPULSE DUEL: ${link}`, url: link })} />
+          <Btn label="Invite Friend" primary onPress={() => Share.share({ message: `Play me in BLUFF & BONK: ${link}`, url: link })} />
         </Row>
         <View style={{ width: "100%", gap: 10 }}>{[you, other(you)].map(slot)}</View>
         <Text style={s.muted} accessibilityLiveRegion="polite">

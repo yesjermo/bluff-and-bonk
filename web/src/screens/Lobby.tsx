@@ -17,7 +17,7 @@ export function Lobby({ client, onLeave }: { client: GameClient; onLeave: () => 
     const text = what === "code" ? s.room : inviteLink(s.room);
     try {
       if (what === "link" && navigator.share && matchMedia("(pointer: coarse)").matches) {
-        await navigator.share({ title: "IMPULSE DUEL", text: "Play me in IMPULSE DUEL", url: text });
+        await navigator.share({ title: "BLUFF & BONK", text: "Play me in BLUFF & BONK", url: text });
       } else {
         await navigator.clipboard.writeText(text);
       }

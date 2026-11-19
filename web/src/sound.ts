@@ -2,7 +2,7 @@
 let ctx: AudioContext | null = null;
 let muted = (() => {
   try {
-    return localStorage.getItem("impulse.muted") === "1";
+    return localStorage.getItem("bonk.muted") === "1";
   } catch {
     return false;
   }
@@ -12,7 +12,7 @@ export const isMuted = () => muted;
 export function setMuted(m: boolean) {
   muted = m;
   try {
-    localStorage.setItem("impulse.muted", m ? "1" : "0");
+    localStorage.setItem("bonk.muted", m ? "1" : "0");
   } catch {
     /* ignore */
   }

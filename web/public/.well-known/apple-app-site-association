@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["TEAMID.com.impulseduel.app"],
+        "appIDs": ["TEAMID.com.bluffbonk.app"],
         "components": [{ "/": "/r/*", "comment": "Room invites open in the app" }]
       }
     ]

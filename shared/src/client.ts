@@ -103,7 +103,7 @@ export class GameClient {
 
   async join(code: string): Promise<void> {
     const room = code.trim().toUpperCase();
-    const token = (await this.store.get(`impulse.token.${room}`)) || undefined;
+    const token = (await this.store.get(`bonk.token.${room}`)) || undefined;
     this.start({ t: "join", room, token });
   }
 
@@ -248,7 +248,7 @@ export class GameClient {
     this.intro = null;
     if (s.you) {
       this.token = s.you.token;
-      void this.store.set(`impulse.token.${s.room}`, s.you.token);
+      void this.store.set(`bonk.token.${s.room}`, s.you.token);
     }
     const t = s.turn;
     if (t && t.id !== prevTurn) {

@@ -22,8 +22,8 @@ from .physics import C, DT, Simulation, describe, positions as body_positions
 
 import os
 
-# Test hook: IMPULSE_TIME_SCALE=0.2 runs every timer and the streamed simulation 5x faster.
-TIME_SCALE = float(os.getenv("IMPULSE_TIME_SCALE", "1"))
+# Test hook: BONK_TIME_SCALE=0.2 runs every timer and the streamed simulation 5x faster.
+TIME_SCALE = float(os.getenv("BONK_TIME_SCALE", "1"))
 R = {k: (v * TIME_SCALE if k.endswith("Ms") else v) for k, v in C["rules"].items()}
 SNAP_EVERY = C["physics"]["snapshotEvery"]
 SIDES = ("A", "B")

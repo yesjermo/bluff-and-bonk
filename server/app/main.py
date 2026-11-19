@@ -1,4 +1,4 @@
-"""IMPULSE DUEL server: room registry, HTTP endpoints and the WebSocket protocol."""
+"""BLUFF & BONK server: room registry, HTTP endpoints and the WebSocket protocol."""
 from __future__ import annotations
 
 import asyncio
@@ -52,7 +52,7 @@ async def lifespan(_: FastAPI):
     task.cancel()
 
 
-app = FastAPI(title="IMPULSE DUEL", lifespan=lifespan)
+app = FastAPI(title="BLUFF & BONK", lifespan=lifespan)
 origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])
 

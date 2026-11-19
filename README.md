@@ -1,9 +1,9 @@
-# IMPULSE DUEL
+# BLUFF & BONK
 
-[![Play in your browser](https://img.shields.io/badge/play-in%20your%20browser-2CE3F2?style=for-the-badge&labelColor=070E22)](https://yesjermo.github.io/impulse-duel/)
+[![Play in your browser](https://img.shields.io/badge/play-in%20your%20browser-2CE3F2?style=for-the-badge&labelColor=070E22)](https://yesjermo.github.io/bluff-and-bonk/)
 
-[![CI](https://github.com/yesjermo/impulse-duel/actions/workflows/ci.yml/badge.svg)](https://github.com/yesjermo/impulse-duel/actions/workflows/ci.yml)
-[![Deploy web demo](https://github.com/yesjermo/impulse-duel/actions/workflows/pages.yml/badge.svg)](https://github.com/yesjermo/impulse-duel/actions/workflows/pages.yml)
+[![CI](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml)
+[![Deploy web demo](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml)
 ![Platforms](https://img.shields.io/badge/platforms-web%20%7C%20iOS%20%7C%20Android-FF8A2A)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-WebSockets-009688?logo=fastapi&logoColor=white)
@@ -13,7 +13,7 @@
 ![Expo](https://img.shields.io/badge/Expo-SDK%2058-000020?logo=expo&logoColor=white)
 ![React Native Skia](https://img.shields.io/badge/React%20Native-Skia-61DAFB?logo=react&logoColor=black)
 
-**Website:** https://yesjermo.github.io/impulse-duel/
+**Website:** https://yesjermo.github.io/bluff-and-bonk/
 
 Two players secretly aim their disks, lock a shot, and launch at the same time to
 knock a neutral ball into the opposing goal. First to two goals wins.
@@ -99,9 +99,9 @@ Simulator directly (no signing needed), then install the `.app`:
 
 ```bash
 cd mobile/ios && pod install
-xcodebuild -workspace ImpulseDuel.xcworkspace -scheme ImpulseDuel -sdk iphonesimulator \
+xcodebuild -workspace BluffBonk.xcworkspace -scheme BluffBonk -sdk iphonesimulator \
   -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO
-xcrun simctl install booted build/Build/Products/Debug-iphonesimulator/ImpulseDuel.app
+xcrun simctl install booted build/Build/Products/Debug-iphonesimulator/BluffBonk.app
 ```
 
 **Physical device:** the phone must reach the server. In development the app
@@ -127,11 +127,11 @@ also defaults to `<page host>:8000`.
 | web (build time) | `VITE_BASE` | Path prefix the site is served under (default `/`). |
 | mobile | `EXPO_PUBLIC_SERVER_URL` | Backend base URL for the app. |
 | mobile | `EXPO_PUBLIC_WEB_URL` | Web origin used in invite links (`https://<domain>/r/CODE`). |
-| mobile (build) | `IMPULSE_WEB_DOMAIN` | Domain for iOS associated domains + Android app links. |
-| mobile (build) | `IMPULSE_IOS_BUNDLE_ID`, `IMPULSE_ANDROID_PACKAGE`, `EAS_PROJECT_ID` | Identity for store builds. |
+| mobile (build) | `BONK_WEB_DOMAIN` | Domain for iOS associated domains + Android app links. |
+| mobile (build) | `BONK_IOS_BUNDLE_ID`, `BONK_ANDROID_PACKAGE`, `EAS_PROJECT_ID` | Identity for store builds. |
 
 **Offline static build** (what the website uses): `npm run build:pages` builds
-with `VITE_OFFLINE=1` and the `/impulse-duel/` base path; practice runs in the
+with `VITE_OFFLINE=1` and the `/bluff-and-bonk/` base path; practice runs in the
 browser and online rooms are disabled. `.github/workflows/pages.yml` deploys it
 on every push to `main`.
 
@@ -146,14 +146,14 @@ Invites are plain HTTPS links: `https://<web domain>/r/CODE`.
 
 - **No app installed:** the link opens the web game and joins the room directly.
 - **App installed + links configured:** iOS universal links / Android app links
-  open the app, which joins the room. `impulseduel://r/CODE` also works.
+  open the app, which joins the room. `bluffbonk://r/CODE` also works.
 
 Still needed before app links work on real devices (not done here):
 
 1. **iOS:** an Apple Developer Team ID. Put `TEAMID.<bundle id>` in
    `web/public/.well-known/apple-app-site-association` and serve it from
    `https://<domain>/.well-known/apple-app-site-association` (JSON, no redirect).
-   `app.config.ts` already adds `applinks:<IMPULSE_WEB_DOMAIN>`.
+   `app.config.ts` already adds `applinks:<BONK_WEB_DOMAIN>`.
 2. **Android:** the SHA-256 fingerprint of the release signing key (from
    `eas credentials` or Play App Signing) in `web/public/.well-known/assetlinks.json`.
    The intent filter with `autoVerify` is in `app.config.ts`.
@@ -180,6 +180,20 @@ Signing still needed: an Apple Developer account (distribution certificate +
 ad-hoc provisioning profile with device UDIDs for iOS preview; App Store profile
 for production) and an Android keystore (EAS can generate one). No EAS builds
 were produced as part of this work; see the build status section of the report.
+
+## Roadmap
+
+**Online play on the website (saved for later).** The website currently runs
+practice only. To turn on Create Room / Join Room there:
+
+- [ ] Host `server/` somewhere that supports WebSockets over HTTPS (for example
+      Render, Fly.io or Railway) and set `ALLOWED_ORIGINS` to the site origin.
+- [ ] In `.github/workflows/pages.yml`, set `VITE_SERVER_URL` to that host; the
+      offline build then keeps in-browser practice and enables online rooms.
+- [ ] Point `EXPO_PUBLIC_SERVER_URL` / `EXPO_PUBLIC_WEB_URL` in `mobile/eas.json`
+      at the same host and site so phones and browsers share rooms.
+- [ ] Rooms are in memory on one process: keep a single instance, or add
+      sticky routing by room code before scaling out.
 
 ## How it works
 

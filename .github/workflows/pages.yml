@@ -1,7 +1,7 @@
 name: Deploy web demo
 
 # Builds the browser game in offline-practice mode (no server needed) and
-# publishes it to https://yesjermo.github.io/impulse-duel/
+# publishes it to https://yesjermo.github.io/bluff-and-bonk/
 on:
   push:
     branches: [main]

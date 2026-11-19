@@ -29,13 +29,13 @@ export default function App() {
 
   useEffect(() => client.subscribe(force), []);
   useEffect(() => {
-    void AsyncStorage.multiGet(["impulse.haptics", "impulse.tutorialDone"]).then(([h, t]) => {
+    void AsyncStorage.multiGet(["bonk.haptics", "bonk.tutorialDone"]).then(([h, t]) => {
       if (h[1] === "0") setHapticsState(false);
       if (t[1] === "1") setTutorialDone(true);
     });
     void AccessibilityInfo.isReduceMotionEnabled().then(setReduced);
     const rm = AccessibilityInfo.addEventListener("reduceMotionChanged", setReduced);
-    // Invite links: https://<web>/r/CODE (universal/app links) or impulseduel://r/CODE.
+    // Invite links: https://<web>/r/CODE (universal/app links) or bluffbonk://r/CODE.
     void Linking.getInitialURL().then((u) => {
       const code = roomFromUrl(u);
       if (code) void client.join(code);
@@ -55,11 +55,11 @@ export default function App() {
 
   const setHaptics = (v: boolean) => {
     setHapticsState(v);
-    void AsyncStorage.setItem("impulse.haptics", v ? "1" : "0");
+    void AsyncStorage.setItem("bonk.haptics", v ? "1" : "0");
   };
   const markTutorial = () => {
     setTutorialDone(true);
-    void AsyncStorage.setItem("impulse.tutorialDone", "1");
+    void AsyncStorage.setItem("bonk.tutorialDone", "1");
   };
 
   if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: T.bg }} />;

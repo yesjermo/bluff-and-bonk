@@ -153,18 +153,11 @@ button {
   letter-spacing: 0.01em;
   font-style: italic;
 }
-.wordmark span {
-  color: var(--cyan);
+.wordmark .amp {
+  color: var(--tang);
 }
-.wordmark span::after {
-  content: "";
-  display: inline-block;
-  width: 0.16em;
-  height: 0.16em;
-  margin-left: 0.06em;
-  background: var(--tang);
-  border-radius: 2px;
-  transform: skewX(-12deg);
+.wordmark .bonk {
+  color: var(--cyan);
 }
 .tagline {
   margin: 10px 0 0;

@@ -10,7 +10,7 @@ import { HowTo } from "./components/HowTo";
 
 // Seat tokens live per tab (sessionStorage) so two tabs can be two players and a
 // refresh rejoins the same seat; preferences live in localStorage.
-const area = (k: string) => (k.startsWith("impulse.token.") ? sessionStorage : localStorage);
+const area = (k: string) => (k.startsWith("bonk.token.") ? sessionStorage : localStorage);
 const store: KeyValueStore = {
   get: (k) => {
     try {
@@ -38,8 +38,8 @@ if (new URLSearchParams(location.search).has("wire")) {
   sharedClient.onRaw = (raw) => g.__wire.push(raw);
 }
 
-export const tutorialDone = () => store.get("impulse.tutorialDone") === "1";
-export const markTutorialDone = () => store.set("impulse.tutorialDone", "1");
+export const tutorialDone = () => store.get("bonk.tutorialDone") === "1";
+export const markTutorialDone = () => store.set("bonk.tutorialDone", "1");
 
 function useReducedMotion(): boolean {
   const q = "(prefers-reduced-motion: reduce)";

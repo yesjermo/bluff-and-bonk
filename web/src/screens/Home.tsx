@@ -20,7 +20,7 @@ export function Home({ client, onHowTo, reducedMotion }: { client: GameClient; o
     <main className="home">
       <header className="home-head">
         <h1 className="wordmark">
-          IMPULSE <span>DUEL</span>
+          BLUFF <span className="amp">&amp;</span> <span className="bonk">BONK</span>
         </h1>
         <p className="tagline">Aim in secret. Shoot together.</p>
       </header>

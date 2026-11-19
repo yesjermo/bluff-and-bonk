@@ -6,7 +6,7 @@ import socket
 import threading
 import time
 
-os.environ["IMPULSE_TIME_SCALE"] = "0.2"
+os.environ["BONK_TIME_SCALE"] = "0.2"
 
 import pytest
 import uvicorn

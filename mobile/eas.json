@@ -15,17 +15,17 @@
       "distribution": "internal",
       "android": { "buildType": "apk" },
       "env": {
-        "EXPO_PUBLIC_SERVER_URL": "https://api.impulse-duel.example.com",
-        "EXPO_PUBLIC_WEB_URL": "https://impulse-duel.example.com",
-        "IMPULSE_WEB_DOMAIN": "impulse-duel.example.com"
+        "EXPO_PUBLIC_SERVER_URL": "https://api.bluff-and-bonk.example.com",
+        "EXPO_PUBLIC_WEB_URL": "https://bluff-and-bonk.example.com",
+        "BONK_WEB_DOMAIN": "bluff-and-bonk.example.com"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_SERVER_URL": "https://api.impulse-duel.example.com",
-        "EXPO_PUBLIC_WEB_URL": "https://impulse-duel.example.com",
-        "IMPULSE_WEB_DOMAIN": "impulse-duel.example.com"
+        "EXPO_PUBLIC_SERVER_URL": "https://api.bluff-and-bonk.example.com",
+        "EXPO_PUBLIC_WEB_URL": "https://bluff-and-bonk.example.com",
+        "BONK_WEB_DOMAIN": "bluff-and-bonk.example.com"
       }
     }
   },

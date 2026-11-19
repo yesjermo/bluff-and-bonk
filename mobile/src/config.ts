@@ -15,9 +15,9 @@ const webDomain = (Constants.expoConfig?.extra as { webDomain?: string } | undef
 export const PUBLIC_WEB_URL = (process.env.EXPO_PUBLIC_WEB_URL || (webDomain ? `https://${webDomain}` : "http://localhost:5180")).replace(/\/+$/, "");
 export const inviteLink = (code: string) => `${PUBLIC_WEB_URL}/r/${code}`;
 
-/** Extract a room code from https://<domain>/r/CODE or impulseduel://r/CODE. */
+/** Extract a room code from https://<domain>/r/CODE or bluffbonk://r/CODE. */
 export function roomFromUrl(url: string | null): string | null {
   if (!url) return null;
-  const m = /\/r\/([A-Za-z0-9]{4})(?:[/?#]|$)/.exec(url) || /^impulseduel:\/\/r\/([A-Za-z0-9]{4})/.exec(url);
+  const m = /\/r\/([A-Za-z0-9]{4})(?:[/?#]|$)/.exec(url) || /^bluffbonk:\/\/r\/([A-Za-z0-9]{4})/.exec(url);
   return m ? m[1].toUpperCase() : null;
 }
