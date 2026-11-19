@@ -9,6 +9,7 @@
 [![CI](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/ci.yml)
 [![Deploy web demo](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml/badge.svg)](https://github.com/yesjermo/bluff-and-bonk/actions/workflows/pages.yml)
 ![Platforms](https://img.shields.io/badge/platforms-web%20%7C%20iOS%20%7C%20Android-FF8A2A)
+[![License: MIT](https://img.shields.io/badge/license-MIT-FFD23F)](LICENSE)
 <br>
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-WebSockets-009688?logo=fastapi&logoColor=white)
@@ -248,3 +249,7 @@ WebSocket support works the same way (Fly.io, Railway, a VPS): run
 - Drag anywhere on the rink in the direction you want to shoot (arrow starts at your disk; a tap keeps the previous aim).
 - Power buttons 1 / 2 / 3 (independent of drag length). Lock shot.
 - Keyboard (web): ←/→ (or ↑/↓) aim, Shift for big steps, 1–3 power, Space lock.
+
+## License
+
+[MIT](LICENSE) © 2026 yesjermo

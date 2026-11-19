@@ -10,3 +10,4 @@ mobile/android/
 mobile/.expo/
 *.log
 .DS_Store
+.claude/
