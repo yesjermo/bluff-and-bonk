@@ -29,11 +29,11 @@ One authoritative FastAPI server runs the physics and rules. The browser game
 (React + Canvas 2D) and the iOS/Android app (Expo + React Native Skia) speak the
 same WebSocket protocol, so web, iPhone and Android players share rooms.
 
-> **About the web demo:** practice (tutorial + bot) runs entirely in your
-> browser using a TypeScript port of the server physics, checked against the
-> Python version in CI. **Create Room / Join Room** need the game server: they
-> switch on automatically once the repo variable `BONK_SERVER_URL` points at a
-> hosted server (see [Host the game server](#host-the-game-server)).
+> **Play online:** open the [website](https://yesjermo.github.io/bluff-and-bonk/),
+> press **Create room**, and send the invite link; your friend joins in their
+> browser. Practice (tutorial + bot) runs entirely in the browser. The game
+> server runs on Render's free plan, so after it has been idle the first
+> connection can take up to a minute while it wakes up.
 
 ```
 shared/   TypeScript used by both clients: protocol types, constants.json,
